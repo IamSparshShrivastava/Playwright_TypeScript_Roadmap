@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Playwright with TypeScript: Course Roadmap</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700&family=Source+Sans+3:wght@400;600&display=swap">
+<style>
+:root{--bg:#eef2f5;--panel:#fff;--tx:#12202f;--mu:#56667a;--bd:#d6dee6;--tr:#cfd8e1;--ok:#1e9e5a;--am:#fff1cf;--amt:#7a4d00;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d1722;--panel:#14212f;--tx:#e8eef5;--mu:#93a4b8;--bd:#25364a;--tr:#2a3b50;--ok:#3cc47d;--am:#3a2d0c;--amt:#f1c765;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0d1722;--panel:#14212f;--tx:#e8eef5;--mu:#93a4b8;--bd:#25364a;--tr:#2a3b50;--ok:#3cc47d;--am:#3a2d0c;--amt:#f1c765;color-scheme:dark}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font:400 16px/1.55 "Source Sans 3",system-ui,-apple-system,"Segoe UI",sans-serif}
+button,input{font:inherit;color:inherit}
+:focus-visible{outline:3px solid #2f6fed;outline-offset:2px}
+.wrap{max-width:960px;margin:0 auto;padding:32px 20px 64px}
+h1{font:700 clamp(2rem,6vw,3.4rem)/1.05 "Bricolage Grotesque","Source Sans 3",system-ui,sans-serif;letter-spacing:-.02em;margin:0 0 12px}
+.lead{max-width:60ch;color:var(--mu);font-size:1.1rem;margin:0 0 22px}
+.stats{display:flex;flex-wrap:wrap;gap:8px 28px;margin:0 0 28px;font-weight:600}
+.stats span{color:var(--mu);font-weight:400}
+.route{overflow-x:auto;padding-bottom:6px;margin-bottom:26px}
+.rin{position:relative;min-width:680px;display:grid;grid-template-columns:repeat(8,1fr)}
+.track,.fill{position:absolute;top:19px;height:6px;border-radius:3px;left:6.25%}
+.track{right:6.25%;background:var(--tr)}
+.fill{width:0;background:var(--ok);transition:width .5s ease}
+.rin{--w:87.5%}
+.fill{max-width:var(--w)}
+.st{position:relative;background:none;border:0;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:8px;padding:0 4px;text-align:center;font-size:.85rem;line-height:1.25}
+.st i{font:700 1rem "Bricolage Grotesque",system-ui,sans-serif;font-style:normal;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:var(--c);color:#fff;border:4px solid var(--bg);transition:transform .15s}
+.st:hover i{transform:scale(1.1)}
+.st.on i::after{content:"\2713";position:absolute;top:-2px;right:calc(50% - 28px);width:18px;height:18px;border-radius:50%;background:var(--ok);color:#fff;font-size:.7rem;display:grid;place-items:center;border:2px solid var(--bg)}
+.tools{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:22px}
+.tools input[type=search]{flex:1 1 240px;min-width:0;padding:10px 14px;border:1px solid var(--bd);border-radius:8px;background:var(--panel)}
+.btn{padding:9px 14px;border:1px solid var(--bd);border-radius:8px;background:var(--panel);cursor:pointer}
+.btn:hover{border-color:var(--mu)}
+.btn[aria-pressed=true]{background:var(--tx);color:var(--bg);border-color:var(--tx)}
+#parts{list-style:none;margin:0;padding:0}
+.part{display:grid;grid-template-columns:48px 1fr;gap:0 14px;position:relative}
+.part::before{content:"";position:absolute;left:23px;top:48px;bottom:-8px;width:2px;background:var(--tr)}
+.part:last-child::before{display:none}
+.node{width:48px;height:48px;border-radius:50%;background:var(--c);color:#fff;display:grid;place-items:center;font:700 1.15rem "Bricolage Grotesque",system-ui,sans-serif;z-index:1}
+.part.complete .node{box-shadow:0 0 0 4px var(--ok)}
+.body{padding-bottom:20px;min-width:0}
+.head{all:unset;box-sizing:border-box;display:grid;grid-template-columns:1fr auto;gap:2px 16px;width:100%;cursor:pointer;padding:2px 0 8px;align-items:center}
+.head:focus-visible{outline:3px solid #2f6fed;outline-offset:2px;border-radius:6px}
+.ttl{font:700 1.35rem/1.2 "Bricolage Grotesque","Source Sans 3",system-ui,sans-serif}
+.bl{grid-column:1;color:var(--mu)}
+.meta{grid-column:2;grid-row:1/3;display:flex;flex-direction:column;align-items:flex-end;gap:6px;font-size:.85rem;color:var(--mu);white-space:nowrap}
+.bar{display:block;width:96px;height:6px;border-radius:3px;background:var(--tr);overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--ok);transition:width .3s}
+.topics{list-style:none;margin:6px 0 0;padding:0;background:var(--panel);border:1px solid var(--bd);border-left:4px solid var(--c);border-radius:4px 10px 10px 4px}
+.topics[hidden]{display:none}
+.topics li+li{border-top:1px solid var(--bd)}
+.topics label{display:grid;grid-template-columns:auto 38px 1fr auto;gap:10px;align-items:baseline;padding:10px 14px;cursor:pointer}
+.topics label:hover{background:color-mix(in srgb,var(--c) 7%,transparent)}
+.topics input{accent-color:var(--ok);width:18px;height:18px;margin:0;align-self:center}
+.topics b{color:var(--c);font-weight:600}
+.topics input:checked~span{text-decoration:line-through;color:var(--mu)}
+.topics em{font-style:normal;font-size:.78rem;padding:1px 9px;border-radius:99px;background:var(--am);color:var(--amt)}
+.topics li[hidden]{display:none}
+.part[hidden],#none[hidden]{display:none}
+#none{padding:28px;text-align:center;color:var(--mu);border:1px dashed var(--bd);border-radius:10px}
+.note{color:var(--mu);font-size:.9rem;margin-top:8px}
+@media (max-width:560px){.part{grid-template-columns:36px 1fr;gap:0 10px}.node{width:36px;height:36px;font-size:.95rem}.part::before{left:17px;top:36px}.head{grid-template-columns:1fr}.meta{grid-column:1;grid-row:auto;flex-direction:row;align-items:center}.topics label{grid-template-columns:auto 34px 1fr}.topics em{grid-column:3;justify-self:start}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+<h1>Playwright with TypeScript</h1>
+<p class="lead">A hands-on path from your first line of TypeScript to AI-assisted test automation. Open a part to see what it covers.</p>
+<p class="stats"><b id="np"></b> <b id="nt"></b> <b><span>Complete</span> <span id="pct" style="color:var(--ok);font-weight:700">0%</span></b></p>
+</header>
+<nav class="route" aria-label="Course route"><div class="rin" id="route"><div class="track"></div><div class="fill" id="fill"></div></div></nav>
+<div class="tools">
+<input type="search" id="q" placeholder="Search topics, e.g. locators, async, MCP" aria-label="Search topics">
+<button class="btn" id="exp">Expand all</button>
+<button class="btn" id="col">Collapse all</button>
+<button class="btn" id="opt" aria-pressed="false">Hide optional topics</button>
+<button class="btn" id="th">Switch theme</button>
+</div>
+<ol id="parts"></ol>
+<div id="none" hidden>No topics match your search. Try a shorter keyword or clear the search box.</div>
+<p class="note">Tick topics as you learn or teach them. Your progress is kept in this browser only. <button class="btn" id="rs" style="margin-left:6px">Reset progress</button></p>
+</div>
+<script>
+const P=[
+{k:"A",n:"Introduction",c:"#2f6fed",b:"Why Playwright, how it compares with Selenium, and the tools you need.",t:[["A1","Selenium vs Playwright: architecture, speed, auto-wait, features"],["A2","What is Playwright: features, supported browsers and languages"],["A3","Course roadmap and tools (Node.js, VS Code, Git)"]]},
+{k:"B",n:"TypeScript Basics",c:"#7a5af8",b:"Learn enough TypeScript to read and write Playwright tests with confidence.",t:[["B1","JavaScript vs TypeScript, why TypeScript"],["B2","Setup: Node.js, npm, tsc, ts-node, first program"],["B3","Variables (let, const) and data types"],["B4","Type inference, any, unknown, null, undefined, void"],["B5","Operators (arithmetic, comparison ===, logical, ??, increment/decrement)"],["B6","String concatenation and template literals"],["B7","Type conversion and type assertion"],["B8","Conditional statements (if, switch)"],["B9","Loops (for, while, do-while, for...of, for...in)"],["B10","Arrays and array methods (push, map, filter, find, forEach)"],["B11","Objects, destructuring, spread and rest","Optional"],["B12","Functions (normal, arrow, default, optional and rest parameters)"],["B13","Union types, literal types, type aliases, enums"],["B14","Interfaces"],["B15","Classes and objects, constructor, this"],["B16","OOP: encapsulation, inheritance, abstraction, polymorphism","Fast pace"],["B17","Access modifiers, static, readonly, abstract class"],["B18","Exception handling (try, catch, finally, throw)"],["B19","Collections: Map and Set"],["B20","Promises and async/await"],["B21","Modules (import and export)"],["B22","npm, package.json, tsconfig.json"],["B23","Generics (introduction)"],["B24","JSON handling, file reading (fs, path), .env"]]},
+{k:"C",n:"Playwright Foundations",c:"#1e9e5a",b:"Install Playwright and learn the building blocks: locators, actions and assertions.",t:[["C1","Installation and project setup (npm init playwright@latest)"],["C2","Project folder structure and playwright.config.ts"],["C3","First test and running tests (headed, headless, CLI options)"],["C4","Codegen (recording tests)"],["C5","Browser, context and page"],["C6","Locators (getByRole, getByText, getByLabel, getByTestId, CSS, XPath)"],["C7","Locator filtering and chaining"],["C8","Actions (click, fill, type, select, check, hover, keyboard, drag and drop)"],["C9","Assertions (expect, web-first, auto-retry, soft assertions)"],["C10","Auto-waiting and timeouts"]]},
+{k:"D",n:"Real-World Scenarios",c:"#0e8f9c",b:"Handle what real applications throw at you: popups, frames, uploads and logins.",t:[["D1","Dropdowns, checkboxes, radio buttons"],["D2","Alerts and dialogs"],["D3","Frames and iframes"],["D4","Multiple tabs and popups"],["D5","File upload and download"],["D6","Authentication and storageState (login reuse)"],["D7","Cookies and local storage"],["D8","Screenshots and videos"]]},
+{k:"E",n:"Test Framework",c:"#a86a00",b:"Turn scripts into a maintainable framework with fixtures, Page Objects and reports.",t:[["E1","Test structure (describe, test, hooks)"],["E2","Annotations (skip, only, fixme, tags)"],["E3","Fixtures (built-in and custom)"],["E4","Page Object Model"],["E5","Data-driven testing (JSON, CSV, parameterized tests)"],["E6","Environment management","Optional"],["E7","Parallel execution, workers, sharding"],["E8","Retries and flaky tests"],["E9","Projects (multi-browser, mobile emulation)","Low priority"],["E10","Reporting (HTML report, Allure)"]]},
+{k:"F",n:"Advanced",c:"#d6483b",b:"API testing, mocking, debugging and the Git skills used in real teams.",t:[["F1","API testing (request), combining UI and API tests"],["F2","Network interception and mocking"],["F3","Visual comparison testing","Introduction"],["F4","Debugging: Inspector, Trace Viewer, VS Code extension"],["F5","Git and GitHub basics"]]},
+{k:"G",n:"AI and MCP",c:"#c2409b",b:"Use AI and MCP to generate, run and review tests, and know where they fall short.",t:[["G1","AI in testing: what it can and cannot do"],["G2","LLM basics and prompting for test generation"],["G3","What is MCP (client, server, tools)"],["G4","Playwright MCP server setup"],["G5","Controlling a browser with an AI agent (demo)"],["G6","Generating and reviewing tests with AI: limits and risks"],["G7","Playwright agents and self-healing","Introduction"]]},
+{k:"H",n:"Capstone",c:"#3d4b63",b:"Bring everything together in one end-to-end project.",t:[["H1","End-to-end mini project (POM, data-driven, API, CI)"]]}
+];
+const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
+const total=P.reduce((a,p)=>a+p.t.length,0);
+let done=new Set();
+try{done=new Set(JSON.parse(localStorage.getItem("pw-done")||"[]"))}catch(e){}
+const save=()=>{try{localStorage.setItem("pw-done",JSON.stringify([...done]))}catch(e){}};
+$("#np").textContent=P.length+" parts";$("#nt").textContent=total+" topics";
+const parts=$("#parts"),route=$("#route");
+function setOpen(li,on){$(".topics",li).hidden=!on;$(".head",li).setAttribute("aria-expanded",on)}
+P.forEach(p=>{
+ const li=document.createElement("li");li.className="part";li.id="p"+p.k;li.style.setProperty("--c",p.c);
+ li.innerHTML='<div class="node">'+p.k+'</div><div class="body"><button class="head" aria-expanded="false" aria-controls="t'+p.k+'"><span class="ttl">'+p.n+'</span><span class="bl">'+p.b+'</span><span class="meta"><span class="cnt"></span><span class="bar"><i></i></span></span></button><ul class="topics" id="t'+p.k+'" hidden>'+p.t.map(t=>'<li data-c="'+t[0]+'" data-g="'+(t[2]||"")+'"><label><input type="checkbox" value="'+t[0]+'"'+(done.has(t[0])?" checked":"")+'><b>'+t[0]+'</b><span>'+t[1]+'</span>'+(t[2]?'<em>'+t[2]+'</em>':"")+'</label></li>').join("")+'</ul></div>';
+ parts.append(li);
+ $(".head",li).onclick=()=>setOpen(li,$(".topics",li).hidden);
+ const b=document.createElement("button");b.className="st";b.id="s"+p.k;b.style.setProperty("--c",p.c);b.innerHTML="<i>"+p.k+"</i><span>"+p.n+"</span>";
+ b.onclick=()=>{setOpen(li,true);li.scrollIntoView({behavior:"smooth",block:"start"})};route.append(b);
+});
+parts.addEventListener("change",e=>{const v=e.target.value;if(e.target.checked)done.add(v);else done.delete(v);save();update()});
+function update(){
+ let all=0;
+ P.forEach(p=>{const li=$("#p"+p.k),n=p.t.filter(t=>done.has(t[0])).length;all+=n;
+  $(".cnt",li).textContent=n+" of "+p.t.length+" done";$(".bar i",li).style.width=(n/p.t.length*100)+"%";
+  li.classList.toggle("complete",n===p.t.length);$("#s"+p.k).classList.toggle("on",n===p.t.length)});
+ $("#pct").textContent=Math.round(all/total*100)+"%";$("#fill").style.width=(all/total*87.5)+"%";
+}
+function filter(){
+ const q=$("#q").value.trim().toLowerCase(),hide=$("#opt").getAttribute("aria-pressed")==="true";let any=false;
+ $$(".part").forEach(li=>{let v=0;
+  $$(".topics li",li).forEach(t=>{const g=t.dataset.g,m=(!q||t.textContent.toLowerCase().includes(q))&&!(hide&&(g==="Optional"||g==="Low priority"));t.hidden=!m;if(m)v++});
+  li.hidden=!v;if(v){any=true;if(q)setOpen(li,true)}});
+ $("#none").hidden=any;
+}
+$("#q").oninput=filter;
+$("#opt").onclick=e=>{const b=e.currentTarget;b.setAttribute("aria-pressed",b.getAttribute("aria-pressed")!=="true");filter()};
+$("#exp").onclick=()=>$$(".part").forEach(li=>setOpen(li,true));
+$("#col").onclick=()=>$$(".part").forEach(li=>setOpen(li,false));
+$("#th").onclick=()=>{const r=document.documentElement,cur=r.dataset.theme||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");r.dataset.theme=cur==="dark"?"light":"dark"};
+let armed=0;
+$("#rs").onclick=e=>{const b=e.currentTarget;if(!armed){armed=1;b.textContent="Click again to confirm";setTimeout(()=>{armed=0;b.textContent="Reset progress"},3000);return}
+ done.clear();save();$$(".topics input").forEach(i=>i.checked=false);update();armed=0;b.textContent="Reset progress"};
+update();
+</script>
+</body>
+</html>
